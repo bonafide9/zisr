@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Main {
 
-    // Klasa pomocnicza do policzenia średniej i odchylenia standardowego
     static class Statystyki {
         double suma = 0, sumaKwadratow = 0;
         int liczbaElementow = 0;
@@ -27,13 +26,11 @@ public class Main {
     public static void main(String[] args) throws Exception {
         String[] nazwyKlas = {"Iris-setosa", "Iris-versicolor", "Iris-virginica"};
 
-        // Tablica przechowująca statystyki dla 3 klas i 4 cech
         Statystyki[][] statystykiKlas = new Statystyki[3][4];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) statystykiKlas[i][j] = new Statystyki();
         }
 
-        // 1. Wczytywanie danych z pliku
         List<String> linie = Files.readAllLines(Paths.get("iris.data"));
         for (String linia : linie) {
             if (linia.isEmpty()) continue;
@@ -48,8 +45,6 @@ public class Main {
             }
         }
 
-        // 2. BUDOWA MODELU PRZY UŻYCIU BIBLIOTEKI fuzzlib
-        // Zamiast naszej własnej klasy, używamy oryginalnego FuzzySet z biblioteki
         FuzzySet[][] model = new FuzzySet[3][4];
 
         for (int i = 0; i < 3; i++) {
@@ -69,11 +64,10 @@ public class Main {
 
         System.out.println("Model rozmyty (oparty na fuzzlib) został zbudowany pomyślnie!\n");
 
-        // 3. Testowanie i Klasyfikacja
         double[][] wektoryTestowe = {
-                {5.1, 3.5, 1.4, 0.2}, // Typowy Iris-setosa
-                {6.5, 2.8, 4.6, 1.5}, // Typowy Iris-versicolor
-                {7.2, 3.6, 6.1, 2.5}  // Typowy Iris-virginica
+                {5.1, 3.5, 1.4, 0.2},
+                {6.5, 2.8, 4.6, 1.5},
+                {7.2, 3.6, 6.1, 2.5}
         };
 
         for (double[] wektor : wektoryTestowe) {
@@ -91,7 +85,6 @@ public class Main {
             double sumaPrzynaleznosci = 0.0;
 
             for (int j = 0; j < 4; j++) {
-                // Wykorzystujemy metodę getMembership z klasy FuzzySet (biblioteka fuzzlib)
                 sumaPrzynaleznosci += model[i][j].getMembership(wektor[j]);
             }
 
