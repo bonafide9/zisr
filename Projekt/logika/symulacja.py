@@ -1,11 +1,17 @@
 from skfuzzy import control as ctrl
 from .reguly import reguly_dzien, reguly_noc
 
-system_dzien = ctrl.ControlSystemSimulation(ctrl.ControlSystem(reguly_dzien))
-system_noc = ctrl.ControlSystemSimulation(ctrl.ControlSystem(reguly_noc))
+system_dzien = ctrl.ControlSystem(reguly_dzien)
+system_noc = ctrl.ControlSystem(reguly_noc)
 
 def oblicz_moce(temp_wew, hum_wew, co2_val, temp_zew, hum_zew, tryb):
-    symulacja = system_dzien if tryb == "Dzień" else system_noc
+    if tryb == "Dzień":
+        system = system_dzien
+    elif tryb == "Noc":
+        system = system_noc
+    else:
+        raise ValueError(f"Nieznany tryb symulacji: {tryb}")
+    symulacja = ctrl.ControlSystemSimulation(system)
     
     symulacja.input['temperatura'] = temp_wew
     symulacja.input['wilgotnosc'] = hum_wew

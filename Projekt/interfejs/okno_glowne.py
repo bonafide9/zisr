@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 import matplotlib
-matplotlib.use('Agg')
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import traceback
 
 # Piękny import prosto z naszego nowego pakietu 'logika'
 from logika import oblicz_moce, temperatura, wilgotnosc, co2, temp_zewnetrzna, wilgotnosc_zewnetrzna, cyrkulator, klima
@@ -11,8 +12,8 @@ from logika import oblicz_moce, temperatura, wilgotnosc, co2, temp_zewnetrzna, w
 class AplikacjaCyrkulatora:
     def __init__(self, root):
         self.root = root
-        self.root.title("Panel Inżynierski HVAC - Pełna Analiza Systemu")
-        self.root.geometry("1400x700") 
+        self.root.title("Panel kontroli")
+        self.root.geometry("1400x750") 
         self.root.resizable(False, False)
 
         style = ttk.Style()
@@ -147,6 +148,7 @@ class AplikacjaCyrkulatora:
             self.wyjscie_klimatyzator["vline"].set_xdata([moc_klimatyzacji, moc_klimatyzacji])
             self.wyjscie_klimatyzator["canvas"].draw_idle()
             
-        except Exception:
-            self.wyjscie_cyrkulator["lbl"].config(text="Błąd")
+        except Exception as exc:
+            traceback.print_exc()
+            self.wyjscie_cyrkulator["lbl"].config(text=f"Błąd: {exc}")
             self.wyjscie_klimatyzator["lbl"].config(text="Błąd")
